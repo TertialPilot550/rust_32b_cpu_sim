@@ -1,15 +1,15 @@
-use super::{arch, datatypes::Program};
-
+use super::arch;
+use crate::datatypes::Program;
 /**
  * CPU implementation of the architecture defintions
  * sammc
  */
 
 pub struct CPU {
-    pub debug_mode: bool,
-    pub registers: [i32; arch::REG_NUM as usize],    // Registers
-    pub memory: [u8; arch::MEM_SIZE as usize],       // Memory
-    pub program_counter: u32                   // Program Counter
+    pub debug_mode: bool,      // debug_mode
+    pub registers: Vec<i32>,   // Registers
+    pub memory: Vec<u8>,       // Memory. This needs to be a Vec() otherwise it stack overflows
+    pub program_counter: u32   // Program Counter
 }
 
 // CPU Implementation
@@ -19,8 +19,8 @@ impl CPU {
     pub fn new() -> Self {
         let res = CPU {
             debug_mode: true,
-            registers: [0; arch::REG_NUM as usize],
-            memory: [0; arch::MEM_SIZE as usize],
+            registers: vec![0; arch::REG_NUM as usize],
+            memory: vec![0; arch::MEM_SIZE as usize],
             program_counter: arch::PC_START as u32
         };
         if res.debug_mode { res.print_state() };

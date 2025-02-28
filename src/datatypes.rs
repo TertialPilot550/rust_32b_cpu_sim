@@ -17,7 +17,13 @@ impl Program {
     }
 }
 
-struct Protogram {
+impl Clone for Program {
+    fn clone(&self) -> Self {
+        Self { instructions: self.instructions.clone(), data: self.data.clone() }
+    }
+}
+
+pub struct Protogram {
     text: Vec<Instruction>, 
     data: Vec<StaticData>
 }

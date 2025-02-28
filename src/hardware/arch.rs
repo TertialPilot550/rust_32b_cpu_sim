@@ -1,4 +1,4 @@
-use super::datatypes::Program;
+use crate::datatypes::Program;
 
 /**
  * Architecture definitions, based on the MIPS ISA.
