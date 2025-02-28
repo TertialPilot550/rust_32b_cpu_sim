@@ -1,4 +1,4 @@
-use crate::program::Program;
+use super::datatypes::Program;
 
 /**
  * Architecture definitions, based on the MIPS ISA.
@@ -10,10 +10,10 @@ use crate::program::Program;
 // Number of Registers
 pub const REG_NUM: u32 = 32;    
 // Memory Address Declarations
-pub const PC_START: u32 = 0x0040_0000;        // PC Starting Address
-pub const STATIC_DATA: u32 = 0x1000_0000;     // Static Data Space
-pub const DYNAMIC_DATA: u32 = 0x1000_8000;    // Dyanamic Data Space
-pub const END_MEM: u32 = 0x1000_8000;         // Last Valid Memory Address
+pub const PC_START: u32 = 0x0040;        // PC Starting Address
+pub const STATIC_DATA: u32 = 0x1000;     // Static Data Space
+pub const DYNAMIC_DATA: u32 = 0x4000;    // Dyanamic Data Space
+pub const END_MEM: u32 = 0x8000;         // Last Valid Memory Address
 
 // Memory Size Declarations
 pub const MEM_SIZE: u32 = END_MEM + 1;        // Address Space in bytes
@@ -42,8 +42,8 @@ pub trait MipsIsa {
     fn addiu(&mut self, rs: u32, rt: u32, immediate: i16);
     fn andi(&mut self, rs: u32, rt: u32, immediate: i16);
     fn ori(&mut self, rs: u32, rt: u32, immediate: i16);
-    fn beq(&mut self, rs: u32, rt: u32, immediate: u16);
-    fn bne(&mut self, rs: u32, rt: u32, immediate: u16);
+    fn beq(&mut self, rs: u32, rt: u32, immediate: i16);
+    fn bne(&mut self, rs: u32, rt: u32, immediate: i16);
     fn lbu(&mut self, rs: u32, rt: u32, immediate: i16);
     fn lhu(&mut self, rs: u32, rt: u32, immediate: i16);
     fn lui(&mut self, rs: u32, immediate: i16);
@@ -64,7 +64,7 @@ pub trait MipsIsa {
         let rt: u32 = (instruction >> 16) & 0x1F;   // 20..16
         let rd: u32 = (instruction >> 11) & 0x1F;   // 15..11
         let shamt: u32 = (instruction >> 6) & 0x1F; // 10..6
-        let func = instruction & 0x3F;         // 5..0
+        let func: u32 = instruction & 0x3F;         // 5..0
 
         let immediate: i16 = (instruction & 0xFFFF) as i16; // 16 bits
         let address: u32 = instruction & 0xFF_FFFF;         // 24 bits
@@ -96,8 +96,8 @@ pub trait MipsIsa {
             0x8 => Self::addi(self, rs, rt, immediate),
             0x9 => Self::addiu(self, rs, rt, immediate),
             0xc => Self::andi(self, rs, rt, immediate),
-            0x4 => Self::beq(self, rs, rt, immediate as u16),
-            0x5 => Self::bne(self, rs, rt, immediate as u16),
+            0x4 => Self::beq(self, rs, rt, immediate),
+            0x5 => Self::bne(self, rs, rt, immediate),
             0xf => Self::lui(self, rs, immediate),
             0x23 => Self::lw(self, rs, rt, immediate),
             0xd => Self::ori(self, rs, rt, immediate),

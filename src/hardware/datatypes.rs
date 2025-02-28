@@ -41,13 +41,13 @@ pub struct IInstruction {
     rs: u8,
     rt: u8,
     immediate: i16,
-    lblOp: String
+    lbl_0p: String
 }
 pub struct JInstruction {
     label: String,
     opcode: u8,
     address: u32,
-    lblOp: String
+    lbl_op: String
 }
 
 pub struct StaticData {
